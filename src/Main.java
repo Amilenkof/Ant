@@ -1,10 +1,15 @@
 public class Main {
- public static void main(String[] args) {
-     Field field = new Field(20, 20);
-     field.printField();
-     Ant ant = new Ant(10, 8);
-     ant.addAnt(field,'ᐃ');
-     ant.moveAnt(field,ant);
-     field.printField();
- }
+    public static void main(String[] args) {
+        Field field = new Field(5, 5);
+        field.printField();
+        System.out.println();
+        Ant ant = new Ant(2, 2, false);
+        for (int i = 0; i < 10; i++) {
+            System.out.println("Итерация " + i);
+            ant.moveAnt(field, ant);
+            field.printField();
+        }
+
     }
+}
+

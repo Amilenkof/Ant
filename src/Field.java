@@ -23,10 +23,11 @@ public class Field {
 
     public char[][] greateField() {
 
-            char[][] field = new char[getLenght()][getHeight()];
-            for (int i = 0; i < getLenght(); i++) {
-                for (int j = 0; j < getHeight(); j++) {
-                    field[i][j] = '\u25A1';
+            char[][] field = new char[getHeight()][getLenght()];
+        Ant ant = new Ant(1, 1, false);
+            for (int i = 0; i < getHeight(); i++) {
+                for (int j = 0; j < getLenght(); j++) {
+                    field[i][j] =ant.getEmpty() ;
                 }
             }return field;
         }
@@ -44,7 +45,10 @@ public class Field {
                 }
                 System.out.print(this.field[i][j]);
             }
+
+
+            }
             
         }
     }
-}
+

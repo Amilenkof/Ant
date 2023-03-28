@@ -1,10 +1,7 @@
 import java.util.concurrent.ScheduledExecutorService;
 
 public class Ant {
-    private final char darkUp = '↑';
-    private final char darkDown = '↓';
-    private final char darkLeft = '←';
-    private final char darkRight = '→';
+
     private final char up = 'ᐃ';
     private final char down = 'ᐁ';
     private final char left = 'ᐊ';
@@ -14,12 +11,14 @@ public class Ant {
     private int x;
     private int y;
     char position;
+    private boolean isDark;
 
-    public Ant(int x, int y) {
+    public Ant(int x, int y, boolean isDark) {
 
         this.x = x;
         this.y = y;
         this.position = up;
+        this.isDark = isDark;
     }
 
     public void setX(int x) {
@@ -38,8 +37,17 @@ public class Ant {
         return y;
     }
 
+    public char getUp() {
+        return up;
+    }
+
+    public char getEmpty() {
+        return empty;
+    }
+
     public void checkAnt(Field field, char up, int x, int y) {
         if (this.x < field.getLenght() || this.y < field.getHeight()) {
+            field.getField()[y][x] = up;
             System.out.println("Муравей размещен");
         } else {
             System.out.println("Разместить муравья не удалось измените положение");
@@ -47,17 +55,85 @@ public class Ant {
     }
 
     public void moveAnt(Field field, Ant ant) {
-        if (this.position==up) {
-            field.getField()[x][y] = dark;
-            ant.position = darkRight;
-            ant.setX(x+1);
-        }
-        if (this.position==darkRight) {
 
+        switch (ant.position) {
+            case (up): {
+                if (!isDark) {
+                    field.getField()[y][x] = dark;
+                    ant.isDark = ant.checkIsDark(field.getField()[y][x]);
+                    ant.setX(x + 1);
+                    field.getField()[y][x] = right;
+                    ant.position = right;
+                    break;
+                } else {
+                    field.getField()[y][x] = empty;
+                    ant.isDark = ant.checkIsDark(field.getField()[y][x]);
+                    ant.setX(x - 1);
+                    field.getField()[y][x] = left;
+                    ant.position = left;
+                    break;
+                }
+            }
+            case (down): {
+                if (!isDark) {
+                    field.getField()[y][x] = dark;
+                    ant.isDark = ant.checkIsDark(field.getField()[y][x]);
+                    ant.setX(x - 1);
+                    field.getField()[y][x] = left;
+                    ant.position = left;
+                    break;
+                } else {
+                    field.getField()[y][x] = empty;
+                    ant.isDark = ant.checkIsDark(field.getField()[y][x]);
+                    ant.setX(x + 1);
+                    field.getField()[y][x] = right;
+                    ant.position = right;
+                    break;
+                }
+            }
+            case (left): {
+                if (!isDark) {
+                    field.getField()[y][x] = dark;
+                    ant.isDark = ant.checkIsDark(field.getField()[y][x]);
+                    ant.setY(y - 1);
+                    field.getField()[y][x] = up;
+                    ant.position = up;
+                    break;
+                } else {
+                    field.getField()[y][x] = empty;
+                    ant.isDark = ant.checkIsDark(field.getField()[y][x]);
+                    ant.setY(y + 1);
+                    field.getField()[y][x] = down;
+                    ant.position = down;
+                    break;
+                }
+            }
+            case (right): {
+                if (!isDark) {
+                    field.getField()[y][x] = dark;
+                    ant.isDark = ant.checkIsDark(field.getField()[y][x]);
+                    ant.setY(y + 1);
+                    field.getField()[y][x] = down;
+                    ant.position = down;
+                    break;
+                } else {
+                    field.getField()[y][x] = empty;
+                    ant.isDark = ant.checkIsDark(field.getField()[y][x]);
+                    ant.setY(y - 1);
+                    field.getField()[y][x] = up;
+                    ant.position = up;
+                    break;
+                }
+
+            }
         }
     }
+    public Boolean checkIsDark ( char i) {
+        Ant ant = new Ant(1, 1, false);
+        return (i == ant.getEmpty());}
 
 }
+
 // □'\u25A1'
 // ■  \u25a0
 //ᐅ \u1405
