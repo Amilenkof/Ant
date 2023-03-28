@@ -41,6 +41,10 @@ public class Ant {
         return up;
     }
 
+    public char getDark() {
+        return dark;
+    }
+
     public char getEmpty() {
         return empty;
     }
@@ -60,14 +64,16 @@ public class Ant {
             case (up): {
                 if (!isDark) {
                     field.getField()[y][x] = dark;
-                    ant.isDark = ant.checkIsDark(field.getField()[y][x]);
+                    ant.checkOverLimitX(field);
+                    ant.isDark = ant.checkIsDark(field.getField()[y][x+1]);
                     ant.setX(x + 1);
                     field.getField()[y][x] = right;
                     ant.position = right;
                     break;
                 } else {
                     field.getField()[y][x] = empty;
-                    ant.isDark = ant.checkIsDark(field.getField()[y][x]);
+                    ant.checkLowLimitX(field);
+                    ant.isDark = ant.checkIsDark(field.getField()[y][x-1]);
                     ant.setX(x - 1);
                     field.getField()[y][x] = left;
                     ant.position = left;
@@ -77,14 +83,16 @@ public class Ant {
             case (down): {
                 if (!isDark) {
                     field.getField()[y][x] = dark;
-                    ant.isDark = ant.checkIsDark(field.getField()[y][x]);
+                    ant.checkLowLimitX(field);
+                    ant.isDark = ant.checkIsDark(field.getField()[y][x-1]);
                     ant.setX(x - 1);
                     field.getField()[y][x] = left;
                     ant.position = left;
                     break;
                 } else {
                     field.getField()[y][x] = empty;
-                    ant.isDark = ant.checkIsDark(field.getField()[y][x]);
+                    ant.checkOverLimitX(field);
+                    ant.isDark = ant.checkIsDark(field.getField()[y][x+1]);
                     ant.setX(x + 1);
                     field.getField()[y][x] = right;
                     ant.position = right;
@@ -94,14 +102,16 @@ public class Ant {
             case (left): {
                 if (!isDark) {
                     field.getField()[y][x] = dark;
-                    ant.isDark = ant.checkIsDark(field.getField()[y][x]);
+                    ant.checkLowLimitY(field);
+                    ant.isDark = ant.checkIsDark(field.getField()[y-1][x]);
                     ant.setY(y - 1);
                     field.getField()[y][x] = up;
                     ant.position = up;
                     break;
                 } else {
                     field.getField()[y][x] = empty;
-                    ant.isDark = ant.checkIsDark(field.getField()[y][x]);
+                    ant.checkOverLimitY(field);
+                    ant.isDark = ant.checkIsDark(field.getField()[y+1][x]);
                     ant.setY(y + 1);
                     field.getField()[y][x] = down;
                     ant.position = down;
@@ -111,14 +121,16 @@ public class Ant {
             case (right): {
                 if (!isDark) {
                     field.getField()[y][x] = dark;
-                    ant.isDark = ant.checkIsDark(field.getField()[y][x]);
+                    ant.checkOverLimitY(field);
+                    ant.isDark = ant.checkIsDark(field.getField()[y+1][x]);
                     ant.setY(y + 1);
                     field.getField()[y][x] = down;
                     ant.position = down;
                     break;
                 } else {
                     field.getField()[y][x] = empty;
-                    ant.isDark = ant.checkIsDark(field.getField()[y][x]);
+                    ant.checkLowLimitY(field);
+                    ant.isDark = ant.checkIsDark(field.getField()[y-1][x]);
                     ant.setY(y - 1);
                     field.getField()[y][x] = up;
                     ant.position = up;
@@ -130,9 +142,28 @@ public class Ant {
     }
     public Boolean checkIsDark ( char i) {
         Ant ant = new Ant(1, 1, false);
-        return (i == ant.getEmpty());}
+        return (i == ant.getDark());}
 
-}
+    public  void checkOverLimitX (Field field) {
+        if (x==field.getLenght()-1){
+            x = 0;}
+    }
+    public  void checkOverLimitY (Field field) {
+        if (y==field.getHeight()-1){
+            y = 0;}
+    }
+    public  void checkLowLimitY (Field field) {
+        if (y==0){
+            y = field.getHeight()-1;}
+    }
+
+    public  void checkLowLimitX (Field field) {
+        if (x==0){
+            x = field.getLenght()-1;}
+    }
+    }
+
+
 
 // □'\u25A1'
 // ■  \u25a0
