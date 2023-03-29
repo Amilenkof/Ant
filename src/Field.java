@@ -23,21 +23,22 @@ public class Field {
 
     public char[][] greateField() {
 
-            char[][] field = new char[getHeight()][getLenght()];
+        char[][] field = new char[getHeight()][getLenght()];
         Ant ant = new Ant(1, 1, false);
-            for (int i = 0; i < getHeight(); i++) {
-                for (int j = 0; j < getLenght(); j++) {
-                    field[i][j] =ant.getEmpty() ;
-                }
-            }return field;
+        for (int i = 0; i < getHeight(); i++) {
+            for (int j = 0; j < getLenght(); j++) {
+                field[i][j] = ant.getEmpty();
+            }
         }
+        return field;
+    }
 
 
-    public void printField () {
+    public void printField() {
         for (int i = 0; i < getHeight(); i++) {
 
             for (int j = 0; j < getLenght(); j++) {
-                if (j==getLenght()-1) {
+                if (j == getLenght() - 1) {
                     System.out.print(this.field[i][j]);
                     System.out.println();
                     j = 0;
@@ -45,10 +46,7 @@ public class Field {
                 }
                 System.out.print(this.field[i][j]);
             }
-
-
-            }
-            
         }
     }
+}
 

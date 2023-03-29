@@ -44,12 +44,10 @@ public class Ant {
     public char getDark() {
         return dark;
     }
-
     public char getEmpty() {
         return empty;
     }
-
-    public void checkAnt(Field field, char up, int x, int y) {
+    public void checkAnt(Field field, char up) {
         if (this.x < field.getLenght() || this.y < field.getHeight()) {
             field.getField()[y][x] = up;
             System.out.println("Муравей размещен");
@@ -57,118 +55,81 @@ public class Ant {
             System.out.println("Разместить муравья не удалось измените положение");
         }
     }
-
     public void moveAnt(Field field, Ant ant) {
 
         switch (ant.position) {
             case (up): {
                 if (!isDark) {
-                    field.getField()[y][x] = dark;
-                    ant.checkOverLimitX(field);
-                    ant.isDark = ant.checkIsDark(field.getField()[y][x+1]);
-                    ant.setX(x + 1);
-                    field.getField()[y][x] = right;
-                    ant.position = right;
+                    Ant.makeStep(field, ant, 1, 0, dark, right);
                     break;
                 } else {
-                    field.getField()[y][x] = empty;
-                    ant.checkLowLimitX(field);
-                    ant.isDark = ant.checkIsDark(field.getField()[y][x-1]);
-                    ant.setX(x - 1);
-                    field.getField()[y][x] = left;
-                    ant.position = left;
+                    Ant.makeStep(field, ant, -1, 0, empty, left);
                     break;
                 }
             }
             case (down): {
                 if (!isDark) {
-                    field.getField()[y][x] = dark;
-                    ant.checkLowLimitX(field);
-                    ant.isDark = ant.checkIsDark(field.getField()[y][x-1]);
-                    ant.setX(x - 1);
-                    field.getField()[y][x] = left;
-                    ant.position = left;
+                    Ant.makeStep(field, ant, -1, 0, dark, left);
                     break;
                 } else {
-                    field.getField()[y][x] = empty;
-                    ant.checkOverLimitX(field);
-                    ant.isDark = ant.checkIsDark(field.getField()[y][x+1]);
-                    ant.setX(x + 1);
-                    field.getField()[y][x] = right;
-                    ant.position = right;
+                    Ant.makeStep(field, ant, 1, 0, empty, right);
                     break;
                 }
             }
             case (left): {
                 if (!isDark) {
-                    field.getField()[y][x] = dark;
-                    ant.checkLowLimitY(field);
-                    ant.isDark = ant.checkIsDark(field.getField()[y-1][x]);
-                    ant.setY(y - 1);
-                    field.getField()[y][x] = up;
-                    ant.position = up;
+                    Ant.makeStep(field, ant, 0, -1, dark, up);
                     break;
                 } else {
-                    field.getField()[y][x] = empty;
-                    ant.checkOverLimitY(field);
-                    ant.isDark = ant.checkIsDark(field.getField()[y+1][x]);
-                    ant.setY(y + 1);
-                    field.getField()[y][x] = down;
-                    ant.position = down;
+                    Ant.makeStep(field, ant, 0, 1, empty, down);
                     break;
                 }
             }
             case (right): {
                 if (!isDark) {
-                    field.getField()[y][x] = dark;
-                    ant.checkOverLimitY(field);
-                    ant.isDark = ant.checkIsDark(field.getField()[y+1][x]);
-                    ant.setY(y + 1);
-                    field.getField()[y][x] = down;
-                    ant.position = down;
+                    Ant.makeStep(field, ant, 0, 1, dark, down);
                     break;
                 } else {
-                    field.getField()[y][x] = empty;
-                    ant.checkLowLimitY(field);
-                    ant.isDark = ant.checkIsDark(field.getField()[y-1][x]);
-                    ant.setY(y - 1);
-                    field.getField()[y][x] = up;
-                    ant.position = up;
+                    Ant.makeStep(field, ant, 0, -1, empty, up);
                     break;
                 }
 
             }
         }
     }
-    public Boolean checkIsDark ( char i) {
-        Ant ant = new Ant(1, 1, false);
-        return (i == ant.getDark());}
 
-    public  void checkOverLimitX (Field field) {
-        if (x==field.getLenght()-1){
-            x = 0;}
-    }
-    public  void checkOverLimitY (Field field) {
-        if (y==field.getHeight()-1){
-            y = 0;}
-    }
-    public  void checkLowLimitY (Field field) {
-        if (y==0){
-            y = field.getHeight()-1;}
-    }
+    public Boolean checkIsDark(char i) {
 
-    public  void checkLowLimitX (Field field) {
-        if (x==0){
-            x = field.getLenght()-1;}
+        return (i == this.getDark());
     }
+    public boolean checkLimit(Field field) {
+
+        if (y == 0) {
+            y = field.getHeight() - 1;
+            return true;
+        } else if (x == 0) {
+            x = field.getLenght() - 1;
+            return true;
+        } else if (x == field.getLenght() - 1) {
+            x = 0;
+            return true;
+        } else if (y == field.getHeight() - 1) {
+            y = 0;
+            return true;
+        }
+        return false;
     }
-
-
-
-// □'\u25A1'
-// ■  \u25a0
-//ᐅ \u1405
-//        ᐊ \u140a
-//        ᐁ\u1401
-//        ᐃ \u1403
-//        ↑ ↓ → ←
+    public void changePosition(char position, Field field) {
+        field.getField()[y][x] = position;
+        this.position = position;
+    }
+    public static void makeStep(Field field, Ant ant, int changeX, int changeY, char newCharOnPosition, char newCharOnAnt) {
+        field.getField()[ant.getY()][ant.getX()] = newCharOnPosition;//или empty
+        if (!ant.checkLimit(field)) {
+            ant.isDark = ant.checkIsDark(field.getField()[ant.getY() + changeY][ant.getX() + changeX]);
+            ant.setX(ant.getX() + changeX);// или -1
+            ant.setY(ant.getY() + changeY);
+        }
+        ant.changePosition(newCharOnAnt, field);//или лефт
+    }
+}
